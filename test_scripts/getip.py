@@ -1,0 +1,10 @@
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("airwack3000.local", 80))
+s.send("mcu_do=Address&")
+data = s.recv(4096)
+print(data)
+s.close()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((data, 80))
+s.send("mcu_do=Spray&")

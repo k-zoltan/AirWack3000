@@ -1,5 +1,6 @@
 sntp.sync("84.2.44.19", nil, nil, 1)
 
+dofile("constants.lua")
 dofile("airwack_functions.lua")
 dofile("display_functions.lua")
 dofile("cron_functions.lua")

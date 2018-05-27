@@ -1,9 +1,12 @@
+--[[
+--	CHANGES:
+--		- initI2C(): local variables moved to constants.lua	- 2018.05.27.
+--		- displayOn(): Destroys the timer before creating a new one --> no duplicate timers
+--]]
+
 function initI2C()
-   local sda = 2 -- GPIO2
-   local scl = 1 -- GPIO0
-   local sla = 0x3c
-   i2c.setup(0, sda, scl, i2c.SLOW)
-   disp = u8g.ssd1306_128x64_i2c(sla)
+   i2c.setup(0, SDA_PIN, SCL_PIN, i2c.SLOW)
+   disp = u8g.ssd1306_128x64_i2c(DISP_ADDRESS)
 end 
 
 function initDisplay()
@@ -40,6 +43,10 @@ function loadImage()
 end
 
 function displayOn()
+    if (displayTimer == nil) then
+		displayTimer:stop()
+		displayTimer = nil
+	end
     disp:sleepOff()
     displayTimer = tmr.create()
     displayTimer:register(500, tmr.ALARM_AUTO, updateDisplay)
