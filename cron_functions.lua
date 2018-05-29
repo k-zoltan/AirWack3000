@@ -1,12 +1,14 @@
+--[[
+--	Changes:
+--		- Offset calculation was corrected. - 2018.05.27
+--		
+]]
 --Cron jobs
 --Read spray time from rtc memory if possible
 function initSpraySchedule()
-    spray_time = rtcmem.read32(10)
-    --If something is wrong, return to default
-    if (spray_time <= 0) or (spray_time > 50) or (spray_time == nil) then
-        spray_time = 30
-        rtcmem.write32(10, 30)
-    end
+    --TODO:
+	--Getting spray time from config file
+	spray_time = 30
     setSprayTime(spray_time)
 end
 --Setting spraying time - in every m minutes: if m=15 --> 12:00, 12:15, 12:30 etc
@@ -17,7 +19,7 @@ function setSprayTime(m)
     end
     minuteSchedule = cron.schedule("*/"..m.." * * * *", spray)
     spray_time = m
-    --Cosmetic stuff: 1[st], 2[nd], 3[rd], 4[th]. Proper 
+    --Cosmetic stuff: 1[st], 2[nd], 3[rd], 4[th].
     print("Spraying in every "..m.."th minute.")
 end
 
@@ -25,7 +27,7 @@ function setOntime(hour, minute)
     --local time = utc time + offset
     hour = hour - offset
     if (hour < 0) then
-        hour = 24 - hour
+        hour = (24 - hour) - 24
     end
     if (onchedule ~= nil) then
         onSchedule:unschedule()
@@ -40,7 +42,7 @@ function setOfftime(hour, minute)
     --local time = utc time + offset
     hour = hour - offset
     if (hour < 0) then
-        hour = 24 - hour
+        hour = (24 - hour) - 24
     end
     if (offSchedule ~= nil) then
         offSchedule:unschedule()
@@ -55,7 +57,7 @@ function rgbOffTime(hour, minute)
     --local time = utc time + offset
     hour = hour - offset
     if (hour < 0) then
-        hour = 24 - hour
+        hour = (24 - hour) - 24
     end
     if (rgbOffSchedule ~= nil) then
         rgbOffSchedule:unschedule()
@@ -70,7 +72,7 @@ function rgbOnTime(hour, minute)
     --local time = utc time + offset
     hour = hour - offset
     if (hour < 0) then
-        hour = 24 - hour
+        hour = (24 - hour) - 24
     end
     if (rgbOnSchedule ~= nil) then
         rgbOnSchedule:unschedule()
